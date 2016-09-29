@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Game : MonoBehaviour {
@@ -7,8 +8,10 @@ public class Game : MonoBehaviour {
 	[SerializeField]
 	private Kart kart;
 	[SerializeField]
+	private Text timeText;
 	private Vector3 cameraOffset;
-	private float forwardOffset = 1;
+	private float forwardOffset = 3;
+	private float gameTimer;
 
 	private void Start () {
 		mainCam = Camera.main;
@@ -16,11 +19,21 @@ public class Game : MonoBehaviour {
 	}
 
 	private void Update () {
+		CameraFollow (kart);
+		UpdateTime ();
+	}
+
+	private void CameraFollow (Kart target) {
 		mainCam.transform.position = new Vector3(
-			kart.transform.position.x - kart.transform.forward.x * 2,
-			kart.transform.position.y + cameraOffset.y,
-			kart.transform.position.z - kart.transform.forward.z * 2
+			target.transform.position.x - target.transform.forward.x * forwardOffset,
+			target.transform.position.y + cameraOffset.y,
+			target.transform.position.z - target.transform.forward.z * forwardOffset
 		);
-		mainCam.transform.LookAt (kart.transform.position + kart.transform.forward * forwardOffset);
+		mainCam.transform.LookAt (target.transform.position + target.transform.forward * forwardOffset);
+	}
+
+	private void UpdateTime () {
+		gameTimer += Time.deltaTime;
+		timeText.text = "Lap: " + gameTimer.ToString ("0");
 	}
 }
