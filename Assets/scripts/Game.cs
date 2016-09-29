@@ -14,7 +14,9 @@ public class Game : MonoBehaviour {
 	private Vector3 cameraOffset;
 	private Checkpoint[] checkpoints;
 	private float forwardOffset = 3;
-	private float gameTimer;
+	private float lapTimer;
+	private float bestLapTime = 999;
+	private bool finishedLap;
 	private int currentCheckpoint = -1;
 
 	private void Start () {
@@ -44,8 +46,12 @@ public class Game : MonoBehaviour {
 	}
 
 	private void UpdateTime () {
-		gameTimer += Time.deltaTime;
-		timeText.text = "Lap: " + gameTimer.ToString ("0");
+		lapTimer += Time.deltaTime;
+		timeText.text = "Lap: " + lapTimer.ToString ("0");
+		if (finishedLap) {
+			timeText.text += "\nBest Time: " + bestLapTime.ToString ("0");
+			//finishedLap = false;
+		}
 	}
 
 	private void OnHitCheckpoint (int checkpointId) {
@@ -53,8 +59,10 @@ public class Game : MonoBehaviour {
 			currentCheckpoint++;
 		}
 		if (checkpointId == 0 && currentCheckpoint == checkpoints.Length - 1) {
-			Debug.Log ("Lap finished!");
+			finishedLap = true;
+			bestLapTime = lapTimer < bestLapTime ? lapTimer : bestLapTime;
 			currentCheckpoint = 0;
+			lapTimer = 0;
 		};
 	}
 }
