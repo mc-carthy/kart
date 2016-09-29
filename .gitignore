@@ -28,6 +28,7 @@ ExportedObj/
 *.prefab
 *.unity
 *.asset
+*.mat
 
 # Unity3D generated meta files
 *.pidb.meta
